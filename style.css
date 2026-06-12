@@ -1,0 +1,314 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    position: relative; 
+    /* EFEK BARU: Gradasi warna gelap malam, misterius dan dingin */
+    background:
+        radial-gradient(circle at top left, #1a233a, transparent 60%),
+        radial-gradient(circle at bottom right, #090d16, transparent 60%),
+        #0d111b;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #e2e8f0; /* Teks utama diganti menjadi terang */
+    overflow: hidden;
+}
+
+/* Garis grid latar belakang dibuat lebih samar agar terlihat estetik */
+body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0; 
+    background-size: 44px 44px; 
+    background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px);
+    mask-image: radial-gradient(circle, black, rgba(0,0,0,0.9));
+}
+
+body::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.02; 
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Wadah pemutar musik efek kaca gelap (Dark Glassmorphism) */
+.app-container {
+    position: relative;
+    z-index: 1; 
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    max-width: 1000px;
+    height: 80vh;
+    background: rgba(13, 17, 27, 0.45);
+    backdrop-filter: blur(20px) saturate(120%);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 32px;
+    box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    opacity: 1 !important;
+    animation: liquidFloating 6s ease-in-out infinite;
+    will-change: transform;
+}
+
+.visual-panel {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.01); 
+}
+
+.album-card {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin-bottom: 40px;
+}
+
+/* Piringan hitam dibuat lebih pekat gelap */
+.vinyl-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(#0d0b0b 60%, #171313 61%, #050404 100%);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+    position: relative;
+    animation: rotate 5s linear infinite;
+    animation-play-state: paused;
+    border: 8px solid #141010;
+    transition: transform 0.5s ease;
+}
+
+.vinyl-container.playing {
+    animation-play-state: running;
+}
+
+/* Bagian tengah piringan hitam diubah ke warna abu-abu gelap dingin */
+.vinyl-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: #1e293b;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.track-info { text-align: center; }
+.song-title { font-size: 1.4rem; font-weight: 700; color: #ffffff; margin-bottom: 6px; letter-spacing: -0.3px; }
+.artist-name { font-size: 1.05rem; color: #94a3b8; font-weight: 500; margin-bottom: 4px; }
+/* Tag album diubah warnanya menjadi abu-abu steel modern */
+.album-year { font-size: 0.8rem; color: #f8fafc; background: #334155; padding: 4px 12px; border-radius: 12px; display: inline-block; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+.control-panel {
+    flex: 1.2;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.controls-wrapper {
+    margin-bottom: 30px;
+}
+
+.timeline-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+input[type=range] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+}
+
+/* Bulatan pengatur bar diganti warna perak/putih bersih */
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    margin-top: -4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+}
+
+.buttons-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.ctrl-btn {
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+/* Tombol PLAY/PAUSE utama diganti jadi putih kontras berkilau */
+.ctrl-btn.primary {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #090d16;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+}
+
+.ctrl-btn.primary:hover { transform: scale(1.05); background: #f1f5f9; }
+.ctrl-btn.primary:active { transform: scale(0.95); }
+
+/* Tombol backward dan forward */
+.ctrl-btn.secondary {
+    background: rgba(255, 255, 255, 0.03);
+    color: #64748b;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 0.9rem;
+}
+
+.ctrl-btn.secondary:hover { background: rgba(255, 255, 255, 0.08); color: #f1f5f9; }
+
+.volume-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: flex-end;
+    color: #64748b;
+}
+#volumeBar { width: 80px; }
+
+.lyrics-display {
+    flex: 1;
+    overflow-y: scroll;
+    position: relative;
+    scrollbar-width: none;
+}
+
+.lyrics-display::-webkit-scrollbar {
+    display: none;
+}
+
+#lyricsTrack {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+/* Teks lirik default dibuat abu-abu redup (melambangkan sunyi) */
+.lyric-line {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem; 
+    padding: 10px 16px;
+    margin: 4px 0;
+    border-radius: 8px;
+    color: #475569;
+    opacity: 1 !important; 
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    text-align: left;
+    background: transparent;
+}
+
+.lyric-line:hover {
+    background: rgba(255, 255, 255, 0.03);
+    color: #94a3b8;
+}
+
+/* PERUBAHAN UTAMA: Sorotan Lirik Aktif diubah menjadi biru-cyan pucat bercahaya */
+.lyric-line.active {
+    color: #0f172a !important; /* teks dalam sorotan menjadi gelap agar terbaca jelas */
+    background: #a5f3fc !important; /* warna cyan es pucat khas lagu lovely */
+    font-weight: 700;
+    transform: scale(1.02) translateX(6px);
+    box-shadow: 0 4px 20px rgba(6, 182, 212, 0.25);
+    border-left: 4px solid #22d3ee;
+    opacity: 1 !important;
+}
+
+/* Lirik yang sudah terlewati dibuat abu kebiruan samar */
+.lyric-line.past {
+    opacity: 1 !important;
+    color: #334155;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes liquidFloating {
+    0% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-10px) scale(1.002); }
+    100% { transform: translateY(0px) scale(1); }
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+        height: 95vh;
+        overflow-y: auto;
+        animation: none; 
+    }
+    
+    .visual-panel {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        padding: 30px 20px;
+    }
+
+    .album-card { width: 180px; height: 180px; margin-bottom: 20px; }
+    .vinyl-center { width: 60px; height: 60px; }
+    
+    .lyric-line { font-size: 1.05rem; }
+}
+
+@media (max-width: 480px) {
+    .buttons-row { gap: 20px; }
+    .ctrl-btn.primary { width: 50px; height: 50px; }
+}
